@@ -50,7 +50,13 @@ export function activate(context: vscode.ExtensionContext) {
             viewColumn = 1;
         }
 
-        const panel = vscode.window.createWebviewPanel("preview-server", "Preview", viewColumn, {
+        const fileName = vscode.window.activeTextEditor.document.fileName;
+        let relativePath = vscode.workspace.asRelativePath(fileName);
+        if (vscode.workspace.workspaceFolders === undefined) {
+            let paths = relativePath.split("\\");
+            relativePath = paths[paths.length - 1];
+        }
+        const panel = vscode.window.createWebviewPanel("preview-server", "Preview " + relativePath, viewColumn, {
             enableScripts: true,
             retainContextWhenHidden: true
         });
